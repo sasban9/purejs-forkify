@@ -7,10 +7,10 @@ class RecipeView {
   #data;
 
   render(data) {
-    this.#data = data;
+    if(data){this.#data = data;
     const markup = this.#generateMarkup();
     this.#clear();
-    this.#parentElement.insertAdjacentHTML('afterbegin', markup);
+    this.#parentElement.insertAdjacentHTML('afterbegin', markup);}
   }
 
   renderSpinner = function () {
@@ -27,6 +27,14 @@ class RecipeView {
 
   #clear() {
     this.#parentElement.innerHTML = '';
+  }
+
+  addHandlerRender(handler) {
+    ['hashchange', 'load'].forEach(event =>
+      window.addEventListener(event, handler)
+    );
+    // window.addEventListener('hashchange', showRecipe);
+    // window.addEventListener('load', showRecipe);
   }
 
   #generateMarkup() {

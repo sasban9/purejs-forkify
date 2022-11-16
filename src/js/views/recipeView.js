@@ -7,7 +7,7 @@ import { Fraction } from 'fractional';
 class RecipeView extends View {
   _parentElement = document.querySelector('.recipe');
   _errorMessage = "We couldn't find that recipe. Please try another one!";
-  _message = "";
+  _message = '';
 
   addHandlerRender(handler) {
     ['hashchange', 'load'].forEach(event =>
@@ -15,6 +15,16 @@ class RecipeView extends View {
     );
     // window.addEventListener('hashchange', showRecipe);
     // window.addEventListener('load', showRecipe);
+  }
+
+  addHandlerUpdateServings(handler) {
+    this._parentElement.addEventListener('click', function (e) {
+      const btn = e.target.closest('.btn--update-servings');
+      if (!btn) return;
+      const updateTo = +btn.dataset.updateTo;
+
+      if(updateTo > 0)handler(updateTo);
+    });
   }
 
   _generateMarkup() {
@@ -48,12 +58,16 @@ class RecipeView extends View {
       <span class="recipe__info-text">servings</span>
 
       <div class="recipe__info-buttons">
-        <button class="btn--tiny btn--increase-servings">
+        <button class="btn--tiny btn--update-servings" data-update-to="${
+          this._data.servings - 1
+        }">
           <svg>
             <use href="${icons}#icon-minus-circle"></use>
           </svg>
         </button>
-        <button class="btn--tiny btn--increase-servings">
+        <button class="btn--tiny btn--update-servings" data-update-to="${
+          this._data.servings + 1
+        }">
           <svg>
             <use href="${icons}#icon-plus-circle"></use>
           </svg>

@@ -8,9 +8,9 @@ import 'regenerator-runtime/runtime';
 
 const recipeContainer = document.querySelector('.recipe');
 
-if(module.hot) {
-  module.hot.accept();
-} //coming from parcel, not plain JS
+// if(module.hot) {
+//   module.hot.accept();
+// } //coming from parcel, not plain JS
 
 const controlRecipes = async function () {
   try {
@@ -35,17 +35,18 @@ const controlSearchResults = async function () {
     resultsView.renderSpinner();
     // 1) Get Search Query
     const query = searchView.getQuery();
-    if(!query) return; 
+    if(!query || query.trim() === '') return; 
 
     // 2) Load search results
     await model.loadSearchResults(query);
 
     // 3) Render results
-    console.log(model.state.search.results);
-    resultsView.render(model.state.search.results);
+    // console.log(model.state.search.results);
+    // resultsView.render(model.state.search.results);
+    resultsView.render(model.getSearchResultsPage());
   } catch (err) {
     console.log(err);
-    resultsView.renderError();
+    // resultsView.renderError();
   }
 }
 

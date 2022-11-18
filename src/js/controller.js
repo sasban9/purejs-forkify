@@ -8,6 +8,7 @@ import addRecipeView from './views/addRecipeView';
 
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
+import { MODAL_CLOSE_IN } from './config';
 
 const recipeContainer = document.querySelector('.recipe');
 
@@ -91,10 +92,31 @@ const controlBookmarks = function () {
   bookmarksView.render(model.state.bookmarks);
 };
 
-const controlAddRecipe = function (newRecipe) {
+const controlAddRecipe = async function (newRecipe) {
   console.log(newRecipe);
 
-  // Upload the new recipe data
+  try {
+    // Show loading spinner
+    addRecipeView.renderSpinner();
+    // Upload the new recipe data
+    await model.uploadRecipe(newRecipe);
+    console.log(model.state.recipe);
+
+    // Render recipe
+    recipeView.render(model.state.recipe);
+
+    // Render message
+    addRecipeView.renderSuccess();
+
+    // Close form window
+    setTimeout(() => {
+      addRecipeView.toggleWindow();
+    }, MODAL_CLOSE_IN);
+  } catch (err) {
+    console.log('❤️', err);
+    addRecipeView.renderError(err.message);
+  }
+
 };
 
 const init = function () {
